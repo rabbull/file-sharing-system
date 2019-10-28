@@ -2,14 +2,21 @@
 // Created by karl on 2019/10/27.
 //
 
-#include <zconf.h>
 #include <stdio.h>
 #include <pthread.h>
 #include "../types.h"
 #include "local/local.h"
+#include "logger/logger.h"
 
 int main(int argc, char **argv) {
     _i32 ret;
+    logger_init("/home/karl/.fss/fssd.log");
+    if (!logger_initialized()) {
+        perror("Failed to initialize logger");
+    }
+    add_error("shit!", -1);
+    add_warning("fuck!", 5);
+    return 0;
 
 //    ret = daemon(1, 1);
 //    if (ret < 0) {

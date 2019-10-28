@@ -5,4 +5,4 @@ add_subdirectory(local)
 add_subdirectory(logger)
 
 add_executable(fssd fssd.c)
-target_link_libraries(fssd pthread cliutils local)
+target_link_libraries(fssd pthread cliutils local logger)

@@ -7,10 +7,14 @@
 
 #include "../../types.h"
 
-_ab initialized();
+_b logger_initialized();
 
-void initialize(_s log_path);
+void logger_init(_s log_path);
 
-void put_line(_s record);
+void add_information(_s message, _i64 message_len);
+
+void add_warning(_s message, _i64 message_len);
+
+void add_error(_s message, _i64 message_len);
 
 #endif //FFS_LOGGER_H

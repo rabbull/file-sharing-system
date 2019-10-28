@@ -32,7 +32,7 @@ typedef atomic_int_fast64_t _ai64;
 typedef char _c;
 typedef atomic_char _ac;
 
-typedef char _s[];
+typedef char *_s;
 
 typedef _u8 _b;
 typedef _au8 _ab;
