@@ -56,12 +56,16 @@ int main(int argc, char **argv) {
                 break;
 
             case 'l':
-                print_ignore_warning(opt, stderr);
+                if (argc > 2) {
+                    print_ignore_warning(opt, stderr);
+                }
                 show_file_list();
                 exit(0);
 
             case 'n':
-                print_ignore_warning(opt, stderr);
+                if (argc > 2) {
+                    print_ignore_warning(opt, stderr);
+                }
                 show_neighbors(stdout);
                 exit(0);
 
