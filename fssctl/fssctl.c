@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
 
             case 'n':
                 print_ignore_warning(opt, stderr);
-                show_neighbors();
+                show_neighbors(stdout);
                 exit(0);
 
             case '?':

@@ -14,9 +14,6 @@ int main(int argc, char **argv) {
     if (!logger_initialized()) {
         perror("Failed to initialize logger");
     }
-    add_error("shit!", -1);
-    add_warning("fuck!", 5);
-    return 0;
 
 //    ret = daemon(1, 1);
 //    if (ret < 0) {

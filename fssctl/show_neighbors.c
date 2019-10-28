@@ -4,17 +4,22 @@
 
 #include <sys/socket.h>
 #include <sys/un.h>
-#include <zconf.h>
-#include "ui.h"
+#include <stdio.h>
+#include "local.h"
 
-void show_neighbors() {
-    int fd = socket(AF_UNIX, SOCK_DGRAM, 0);
-    _b msg[] = "Hello bitch!\n";
+void show_neighbors(FILE *fp) {
+    init_socket_to_daemon("/home/karl/.fss/local.sock");
+    _b buf[512] = "$N";
 
-    struct sockaddr_un daemon_addr;
-    socklen_t daemon_addr_len = sizeof(daemon_addr);
-    daemon_addr.sun_family = AF_UNIX;
-    strcpy(daemon_addr.sun_path, "/home/karl/.fss/local.sock");
+    connect_to_daemon();
+    send_to_daemon(buf, sizeof(buf));
 
-    sendto(fd, msg, sizeof(msg), 0, (struct sockaddr *) &daemon_addr, daemon_addr_len);
+    int index = 0;
+    do {
+        int n = recv_from_daemon(buf, sizeof(buf));
+        if (strncmp((char *) buf, "$END", n) == 0) {
+            break;
+        }
+        fprintf(fp, "%s\n", buf);
+    } while (1);
 }

@@ -9,7 +9,7 @@
 
 void show_file_list();
 
-void show_neighbors();
+void show_neighbors(FILE *fp);
 
 void query(_s filename, _b checksum_specified, _s checksum);
 
