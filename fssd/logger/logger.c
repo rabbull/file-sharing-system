@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <fcntl.h>
+#include <errno.h>
+#include <stdio.h>
 #include "logger.h"
 
 static _ab __init_flag = 0;
@@ -30,6 +32,7 @@ void logger_init(_s log_path) {
     pthread_mutex_init(&__mutex, 0);
     __output_fd = open(log_path, O_WRONLY | O_APPEND | O_CREAT, 0b110110110);
     if (__output_fd < 0) {
+        perror("Failed to open log file");
         return;
     }
     __init_flag = 1;

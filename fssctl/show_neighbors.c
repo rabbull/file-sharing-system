@@ -2,7 +2,6 @@
 // Created by karl on 2019/10/27.
 //
 
-#include <sys/socket.h>
 #include <sys/un.h>
 #include <stdio.h>
 #include "local.h"

@@ -3,7 +3,7 @@
 //
 
 #include "../types.h"
-#include "ui.h"
+#include "ui/ui.h"
 
 void query(_s filename, _b checksum_flag, _s checksum) {
     printf("%s\n", filename);

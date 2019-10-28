@@ -4,7 +4,7 @@
 
 #include <stdlib.h>
 #include "ui.h"
-#include "../cliutils/cliutils.h"
+#include "cliutils.h"
 
 void print_usage(FILE* fp) {
     FILE* os_bak = __output_stream;

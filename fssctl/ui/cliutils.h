@@ -6,7 +6,7 @@
 #define FFS_CLIUTILS_H
 
 #include <stdio.h>
-#include "../types.h"
+#include "../../types.h"
 
 extern FILE* __output_stream;
 

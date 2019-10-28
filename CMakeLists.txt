@@ -5,4 +5,3 @@ set(CMAKE_C_STANDARD 11)
 
 add_subdirectory(fssctl)
 add_subdirectory(fssd)
-add_subdirectory(cliutils)

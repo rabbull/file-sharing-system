@@ -6,7 +6,7 @@
 #define FFS_UI_H
 
 #include <stdio.h>
-#include "../types.h"
+#include "../../types.h"
 
 void print_usage(FILE* fp);
 

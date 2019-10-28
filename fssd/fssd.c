@@ -15,12 +15,6 @@ int main(int argc, char **argv) {
         perror("Failed to initialize logger");
     }
 
-//    ret = daemon(1, 1);
-//    if (ret < 0) {
-//        perror("Failed to create daemon.");
-//        return -1;
-//    }
-
     _b running = 1;
     pthread_t local_thread;
     pthread_create(&local_thread, 0, &local_main, &running);
