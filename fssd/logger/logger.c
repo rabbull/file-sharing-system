@@ -2,13 +2,12 @@
 // Created by karl on 2019/10/27.
 //
 
-#include <zconf.h>
 #include <string.h>
 #include <stdlib.h>
 #include <pthread.h>
 #include <fcntl.h>
-#include <errno.h>
 #include <stdio.h>
+#include <unistd.h>
 #include "logger.h"
 
 static _ab __init_flag = 0;

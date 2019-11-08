@@ -2,18 +2,19 @@
 // Created by karl on 2019/10/27.
 //
 
-#include <stdlib.h>
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <stdio.h>
 #include <errno.h>
-#include <zconf.h>
+#include <unistd.h>
 #include "../../types.h"
 
 
 static _i32 init_local_socket(_s path);
 
 void send_neighbors(int sock_fd);
+
+void send_file_list(int sock_fd);
 
 void *local_main(void *running) {
     int fd;
@@ -37,6 +38,8 @@ void *local_main(void *running) {
         printf("recv: %s\n", buf);
         if (strcmp(buf, "$N") == 0) {
             send_neighbors(new_fd);
+        } else if (strcmp(buf, "$L") == 0) {
+            send_file_list(new_fd);
         }
     }
     return NULL;

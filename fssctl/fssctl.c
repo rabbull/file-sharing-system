@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
                 if (argc > 2) {
                     print_ignore_warning(opt, stderr);
                 }
-                show_file_list();
+                show_file_list(stdout);
                 exit(0);
 
             case 'n':

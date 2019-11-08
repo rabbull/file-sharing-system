@@ -6,7 +6,7 @@
 #include <sys/socket.h>
 #include <stdio.h>
 #include <fcntl.h>
-#include "local.h"
+#include "connection.h"
 
 static int sock_fd;
 static struct sockaddr_un daemon_addr;

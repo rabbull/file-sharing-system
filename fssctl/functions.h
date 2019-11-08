@@ -7,7 +7,7 @@
 
 #include "../types.h"
 
-void show_file_list();
+void show_file_list(FILE *fp);
 
 void show_neighbors(FILE *fp);
 

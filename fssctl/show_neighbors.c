@@ -4,7 +4,7 @@
 
 #include <sys/un.h>
 #include <stdio.h>
-#include "local.h"
+#include "connection.h"
 
 void show_neighbors(FILE *fp) {
     init_socket_to_daemon("/home/karl/.fss/local.sock");
