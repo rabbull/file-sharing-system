@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <sys/socket.h>
 #include <string.h>
+
 #include "../../types.h"
 
 void send_neighbors(int sock_fd) {
@@ -27,42 +28,6 @@ void send_neighbors(int sock_fd) {
         send(sock_fd, buf, strlen(buf), 0);
     }
 }
-
-#include <ctype.h>
-#include <stdlib.h>
-#include <assert.h>
-
-//inline _i64 size_to_long(_c *size_str) {
-//    _u64 len = strlen(size_str);
-//
-//    for (_u64 i = 0; i < len; ++i) {
-//        if (!isalnum(size_str[i])) {
-//            return -1;
-//        }
-//    }
-//
-//    _u64 size = strtol(size_str, NULL, 10);
-//    _c unit = 0;
-//    if (isdigit(size_str[len - 1])) {
-//        return size;
-//    } else {
-//        unit = tolower(size_str[len - 1]);
-//    }
-//    switch(unit) {
-//        case 't':
-//            size <<= 10u;
-//        case 'g':
-//            size <<= 10u;
-//        case 'm':
-//            size <<= 10u;
-//        case 'k':
-//            size <<= 10u;
-//            break;
-//        default:
-//            return -2;
-//    }
-//    return size;
-//}
 
 void send_file_list(int sock_fd) {
     FILE *fp = fopen("/home/karl/.fss/file_list", "r");
@@ -101,4 +66,19 @@ void send_file_list(int sock_fd) {
         send(sock_fd, p, strlen(p), 0);
     }
     send(sock_fd, "$END", 4, 0);
+}
+
+void search_file_with_checksum(int fd) {
+    _b filename[1024];
+    recv(fd, filename, 1024, 0);
+    _b checksum[1024];
+    recv(fd, checksum, 1024, 0);
+    puts((_s) filename);
+    puts((_s) checksum);
+}
+
+void search_file(int fd) {
+    _b filename[1024];
+    recv(fd, filename, 1024, 0);
+    puts((_s) filename);
 }

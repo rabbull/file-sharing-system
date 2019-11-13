@@ -11,6 +11,6 @@ void show_file_list(FILE *fp);
 
 void show_neighbors(FILE *fp);
 
-void query(_s filename, _s checksum, _u64 buf_size);
+void search(_s filename, _s checksum, _u64 buf_size);
 
 #endif //FFS_FUNCTIONS_H

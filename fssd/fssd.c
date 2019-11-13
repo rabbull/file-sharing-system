@@ -17,7 +17,10 @@ int main(int argc, char **argv) {
 
     _b running = 1;
     pthread_t local_thread;
-    pthread_create(&local_thread, 0, &local_main, &running);
+    struct local_main_args local_main_args;
+    local_main_args.running = &running;
+    local_main_args.thread_id = &local_thread;
+    pthread_create(&local_thread, 0, &local_main, &local_main_args);
     getchar();
     pthread_cancel(local_thread);
     pthread_join(local_thread, 0);

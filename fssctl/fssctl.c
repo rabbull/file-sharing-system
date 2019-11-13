@@ -81,6 +81,6 @@ int main(int argc, char **argv) {
     if (!checksum_specified) {
         checksum = NULL;
     }
-    query(filename, checksum, buf_size);
+    search(filename, checksum, buf_size);
     return 0;
 }

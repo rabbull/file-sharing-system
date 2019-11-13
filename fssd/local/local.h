@@ -5,6 +5,12 @@
 #ifndef FFS_LOCAL_H
 #define FFS_LOCAL_H
 
-void* local_main(void* running);
+struct local_main_args {
+    _b* running;
+    pthread_t* thread_id;
+    _s sock_file_path;
+};
+
+void* local_main(void* _args);
 
 #endif //FFS_LOCAL_H

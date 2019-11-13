@@ -7,27 +7,27 @@
 #include <stdio.h>
 #include <errno.h>
 #include <unistd.h>
-#include "../../types.h"
 
+#include "../logger/logger.h"
+#include "functions.h"
+#include "local.h"
 
 static _i32 init_local_socket(_s path);
 
-void send_neighbors(int sock_fd);
-
-void send_file_list(int sock_fd);
-
-void query_file_with_checksum(int fd);
-
-void query_file_without_checksum(int fd);
-
-void *local_main(void *running) {
+void *local_main(void *_args) {
     int fd;
+    const _u32 buf_size = 1024;
+    _c msg[buf_size];
+    struct local_main_args* args = (struct local_main_args*) _args;
 
-    fd = init_local_socket("/home/karl/.fss/local.sock");
+    sprintf(msg, "local_main starts at thread %lu", *args->thread_id);
+    add_information(msg, -1);
+
+    fd = init_local_socket(args->sock_file_path);
     if (fd < 0) {
         return NULL;
     }
-    while (*(_b *) running) {
+    while (*args->running) {
         struct sockaddr_un client_addr;
         socklen_t client_addr_len = sizeof(client_addr);
         static const _u32 buf_size = 1024;
@@ -35,19 +35,21 @@ void *local_main(void *running) {
         memset(buf, 0, buf_size);
 
         int new_fd = accept(fd, (struct sockaddr *) &client_addr, &client_addr_len);
-        printf("connected.\n");
 
         sleep(1);
         recv(new_fd, buf, buf_size, 0);
-        printf("recv: %s\n", buf);
         if (strcmp(buf, "$N") == 0) {
+            add_information("receive neighbor query from local front-end", -1);
             send_neighbors(new_fd);
         } else if (strcmp(buf, "$L") == 0) {
+            add_information("receive file list query from local front-end", -1);
             send_file_list(new_fd);
         } else if (strcmp(buf, "$C") == 0) {
-            query_file_with_checksum(new_fd);
-        } else if (strcmp(buf, "$Q") == 0) {
-            query_file_without_checksum(new_fd);
+            add_information("receive file search with checksum request from local front-end", -1);
+            search_file_with_checksum(new_fd);
+        } else if (strcmp(buf, "$S") == 0) {
+            add_information("receive file search without checksum request from local front-end", -1);
+            search_file(new_fd);
         }
     }
     return NULL;

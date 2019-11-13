@@ -5,9 +5,8 @@
 #include "../types.h"
 #include "ui/ui.h"
 #include "connection.h"
-#include <string.h>
 
-void query(_s filename, _s checksum, _u64 buf_size) {
+void search(_s filename, _s checksum, _u64 buf_size) {
     printf("%s", filename);
     if (checksum) {
         printf(" %s", checksum);
@@ -21,18 +20,13 @@ void query(_s filename, _s checksum, _u64 buf_size) {
     if (checksum) {
         command = "$C";
     } else {
-        command = "$Q";
+        command = "$S";
     }
 
     send_to_daemon((_b *) command, 2);
 
-//    _b buf[1024] = {0};
-//    strcat((_s) buf, filename);
-//    if (checksum) {
-//        strcat((_s) buf, checksum);
-//    }
-    send_to_daemon((_b*)filename, buf_size);
+    send_to_daemon((_b *) filename, buf_size);
     if (checksum) {
-        send_to_daemon((_b*)checksum, buf_size);
+        send_to_daemon((_b *) checksum, buf_size);
     }
 }

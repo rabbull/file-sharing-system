@@ -56,7 +56,7 @@ void put_line(record_t type, _s message, _u64 message_len) {
     pthread_mutex_lock(&__mutex);
     // write tag
     static _s tags[3] = {"[II] ", "[WW] ", "[EE] "};
-    write(__output_fd, tags[type], strlen(message));
+    write(__output_fd, tags[type], strlen(tags[type]));
 
     // write time
     _c time_buf[32];
