@@ -14,9 +14,11 @@
 int main(int argc, char **argv) {
     static const _u32 buf_size = 1024;
     _i32 opt;
-    _c filename[buf_size];
+    _c filename_buf[buf_size];
     _b checksum_specified = 0;
-    _c checksum[buf_size];
+    _c checksum_buf[buf_size];
+    _c *filename = filename_buf;
+    _c *checksum = checksum_buf;
     _u32 len;
 
     memset(filename, 0, buf_size);
@@ -76,6 +78,9 @@ int main(int argc, char **argv) {
         }
     }
 
-    query(filename, checksum_specified, checksum);
+    if (!checksum_specified) {
+        checksum = NULL;
+    }
+    query(filename, checksum, buf_size);
     return 0;
 }

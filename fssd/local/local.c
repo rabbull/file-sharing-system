@@ -16,6 +16,10 @@ void send_neighbors(int sock_fd);
 
 void send_file_list(int sock_fd);
 
+void query_file_with_checksum(int fd);
+
+void query_file_without_checksum(int fd);
+
 void *local_main(void *running) {
     int fd;
 
@@ -40,6 +44,10 @@ void *local_main(void *running) {
             send_neighbors(new_fd);
         } else if (strcmp(buf, "$L") == 0) {
             send_file_list(new_fd);
+        } else if (strcmp(buf, "$C") == 0) {
+            query_file_with_checksum(new_fd);
+        } else if (strcmp(buf, "$Q") == 0) {
+            query_file_without_checksum(new_fd);
         }
     }
     return NULL;

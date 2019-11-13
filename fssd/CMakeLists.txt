@@ -4,5 +4,5 @@ project(fssd)
 add_subdirectory(local)
 add_subdirectory(logger)
 
-add_executable(fssd fssd.c)
+add_executable(fssd fssd.c local/query.c)
 target_link_libraries(fssd pthread local logger)
