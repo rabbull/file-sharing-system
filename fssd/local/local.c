@@ -15,17 +15,17 @@
 static _i32 init_local_socket(_s path);
 
 void *local_main(void *_args) {
+    struct local_main_args *args = (struct local_main_args *) _args;
     int fd;
-    const _u32 buf_size = 1024;
-    _c msg[buf_size];
-    struct local_main_args* args = (struct local_main_args*) _args;
-
-    sprintf(msg, "local_main starts at thread %lu", *args->thread_id);
-    add_information(msg, -1);
-
+    add_information("local_main starts at thread %lu", *args->thread_id);
     fd = init_local_socket(args->sock_file_path);
     if (fd < 0) {
         return NULL;
+    }
+    if (!logger_initialized()) {
+        fprintf(stderr, "waiting for logger to be initialized.. ");
+        while (!logger_initialized());
+        fprintf(stderr, "done.");
     }
     while (*args->running) {
         struct sockaddr_un client_addr;

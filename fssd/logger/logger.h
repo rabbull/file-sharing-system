@@ -11,10 +11,10 @@ _b logger_initialized();
 
 void logger_init(_s log_path);
 
-void add_information(_s message, _i64 message_len);
+void add_information(_s format, ...);
 
-void add_warning(_s message, _i64 message_len);
+void add_warning(_s format, ...);
 
-void add_error(_s message, _i64 message_len);
+void add_error(_s format, ...);
 
 #endif //FFS_LOGGER_H

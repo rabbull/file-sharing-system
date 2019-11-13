@@ -8,10 +8,11 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <stdarg.h>
 #include "logger.h"
 
 static _ab __init_flag = 0;
-static int __output_fd = -1;
+static FILE* __output_fp = NULL;
 static pthread_mutex_t __mutex = {0};
 
 typedef enum {
@@ -20,17 +21,17 @@ typedef enum {
     ERROR
 } record_t;
 
-static void put_line(record_t type, _s message, _u64 message_len);
+static void __put_line(record_t type, _s format);
 
-static _u32 get_time_str(_s buf, _u32 buf_size);
+static _u32 __get_time_str(_s buf, _u32 buf_size);
 
 void logger_init(_s log_path) {
     if (__init_flag) {
         return;
     }
     pthread_mutex_init(&__mutex, 0);
-    __output_fd = open(log_path, O_WRONLY | O_APPEND | O_CREAT, 0b110110110);
-    if (__output_fd < 0) {
+    __output_fp = fopen(log_path, "a+");
+    if (__output_fp == NULL) {
         perror("Failed to open log file");
         return;
     }
@@ -41,7 +42,7 @@ _b logger_initialized() {
     return (_b) __init_flag;
 }
 
-_u32 get_time_str(_s buf, _u32 buf_size) {
+_u32 __get_time_str(_s buf, _u32 buf_size) {
     // "yyyy-mm-dd DDD hh:mm:ss "
     time_t tt;
     struct tm *tm;
@@ -52,46 +53,49 @@ _u32 get_time_str(_s buf, _u32 buf_size) {
     return len;
 }
 
-void put_line(record_t type, _s message, _u64 message_len) {
+void __put_line(record_t type, _s format) {
     pthread_mutex_lock(&__mutex);
     // write tag
     static _s tags[3] = {"[II] ", "[WW] ", "[EE] "};
-    write(__output_fd, tags[type], strlen(tags[type]));
+    fputs(tags[type], __output_fp);
 
     // write time
     _c time_buf[32];
-    int time_len;
-    time_len = get_time_str(time_buf, 32);
-    write(__output_fd, time_buf, time_len);
+    __get_time_str(time_buf, 32);
+    fputs(time_buf, __output_fp);
 
-    // wirte message
-    write(__output_fd, message, message_len);
+    // wirte format
+    fputs(format, __output_fp);
 
     // write '\n'
-    write(__output_fd, "\n", 1);
+    fputs("\n", __output_fp);
+    fflush(__output_fp);
     pthread_mutex_unlock(&__mutex);
 }
 
-void add_information(_s message, _i64 message_len) {
-    if (message_len <= 0) {
-        put_line(INFO, message, strlen(message));
-    } else {
-        put_line(INFO, message, message_len);
-    }
+void add_information(_s format, ...) {
+    static _c buf[1024] = {0};
+    va_list args;
+    va_start(args, format);
+    vsprintf(buf, format, args);
+    __put_line(INFO, buf);
+    va_end(args);
 }
 
-void add_warning(_s message, _i64 message_len) {
-    if (message_len <= 0) {
-        put_line(WARN, message, strlen(message));
-    } else {
-        put_line(WARN, message, message_len);
-    }
+void add_warning(_s format, ...) {
+    static _c buf[1024] = {0};
+    va_list args;
+    va_start(args, format);
+    vsprintf(buf, format, args);
+    __put_line(WARN, buf);
+    va_end(args);
 }
 
-void add_error(_s message, _i64 message_len) {
-    if (message_len <= 0) {
-        put_line(ERROR, message, strlen(message));
-    } else {
-        put_line(ERROR, message, message_len);
-    }
+void add_error(_s format, ...) {
+    static _c buf[1024] = {0};
+    va_list args;
+    va_start(args, format);
+    vsprintf(buf, format, args);
+    __put_line(ERROR, buf);
+    va_end(args);
 }
