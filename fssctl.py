@@ -1,16 +1,12 @@
 import os
 import sys
 import argparse as ap
-from config.config import config_main
-from daemon import daemon
-from search.search import search_main
 
 def fssctl_main():
     command_parser = ap.ArgumentParser()
     group = command_parser.add_mutually_exclusive_group()
     group.add_argument('-c', '--config', action='store_true')
     group.add_argument('-s', '--search', action='store_true')
-    group.add_argument('-d', '--daemon', action='store_true')
 
     args = command_parser.parse_args()
 

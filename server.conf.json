@@ -1,4 +1,6 @@
 {
-    "ip": "127.0.0.1",
-    "port": 11001
+    "_DaemonConfig__ip": "127.0.0.1",
+    "_DaemonConfig__port": 11000,
+    "_DaemonConfig__repo_path": "repository",
+    "_DaemonConfig__neig_path": "neighbors"
 }

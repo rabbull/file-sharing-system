@@ -34,23 +34,6 @@ class DaemonConfig(object):
         self.__repo_path = repository_path
         self.__neig_path = neighbor_list_path
         self.self_check()
-    
-    def load(self, path: str):
-        with open(path, 'r') as f:
-            res = json.load(f)
-        self.__ip = res['ip']
-        self.__port = int(res['port'])
-        self.__repo_path = res['repository']
-        self.__neig_path = res['neighbor']
-        self.self_check()
-
-    def as_dict(self):
-        return {
-            'ip': self.__ip,
-            'port': self.__port,
-            'repository': self.repository_path,
-            'neighbor': self.neighbor_list_path,
-        }
 
     def set_ip(self, ip: str):
         self.__ip = ip
@@ -58,6 +41,14 @@ class DaemonConfig(object):
     
     def set_port(self, port: int):
         self.__port = port
+        self.self_check()
+    
+    def set_repo(self, repository_path: str):
+        self.__repo_path = repository_path
+        self.self_check()
+    
+    def set_neig(self, neighbor_list_path: str):
+        self.__neig_path = neighbor_list_path
         self.self_check()
 
     @property
@@ -70,14 +61,14 @@ class DaemonConfig(object):
     
     @property
     def repository_path(self):
-        return self.repository_path
+        return self.__repo_path
     
     @property
     def neighbor_list_path(self):
-        return self.neighbor_list_path
+        return self.__neig_path
 
 
 if __name__ == '__main__':
     config = DaemonConfig()
-    config.load('/mnt/c/Users/Karl/Documents/file-sharing-system/daemon/daemon.conf')
-    print(config.as_dict())
+    config.load('/mnt/c/Users/Karl/Documents/file-sharing-system/server.conf.json')
+    print(config.__dict__)
