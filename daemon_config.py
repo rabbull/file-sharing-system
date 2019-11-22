@@ -69,6 +69,4 @@ class DaemonConfig(object):
 
 
 if __name__ == '__main__':
-    config = DaemonConfig()
-    config.load('/mnt/c/Users/Karl/Documents/file-sharing-system/server.conf.json')
-    print(config.__dict__)
+    pass
