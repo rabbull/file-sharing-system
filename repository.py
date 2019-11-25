@@ -52,7 +52,7 @@ class Repository(object):
         def checksum(self): return self.__checksum
 
         def __eq__(self, another):
-            return self.__dict__ == another.__dict__
+            return str(self.__dict__) == str(another.__dict__)
         
         def __str__(self):
             return json.dumps(self.__dict__)
@@ -61,7 +61,9 @@ class Repository(object):
         self.__path = repository_path
 
     def __read(self):
-        fp = open(self.__path, 'r')
+        print(self.__path)
+        fp = open(self.__path, 'r+')
+        print(fp)
         fcntl.lockf(fp, fcntl.LOCK_EX)
         content = fp.read()
         fcntl.lockf(fp, fcntl.LOCK_UN)
@@ -94,7 +96,13 @@ class Repository(object):
             return
         entries.append(new_entry)
         self.__write(entries)
-        
+    
+    def find(self, filename):
+        entries = self.as_list()
+        for entry in entries:
+            if entry.basename == filename:
+                return entry
+        return None  
 
 
 if __name__ == '__main__':

@@ -32,7 +32,7 @@ def main():
         cfg.set_repo(args.repository)
     
     daemon = Daemon(cfg)
-    daemon.start()
+    daemon()
 
 
 if __name__ == '__main__':

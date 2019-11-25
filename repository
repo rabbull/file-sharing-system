@@ -1,7 +1,7 @@
 [
     {
         "_Entry__type": "file",
-        "_Entry__realpath": "/mnt/c/Users/Karl/Documents/file-sharing-system/.gitignore",
+        "_Entry__realpath": "/home/karl/Documents/file-sharing-system/.gitignore",
         "_Entry__basename": ".gitignore",
         "_Entry__size": 24,
         "_Entry__checksum": "cb7fb1e118725cff65cac48284f5f3f2"
