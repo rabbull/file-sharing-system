@@ -27,10 +27,6 @@ class SearchController(object):
             print(buff)
             buff = json.loads(buff.decode())
 
-            # if buff['from_local']:
-            #     buff['from_local'] = False
-            #     buff['source'] = (self.__ip, self.__port)
-
             if buff['query_id'] in self.__ignore_query_ids:
                 print(f'ignore {buff}')
                 continue

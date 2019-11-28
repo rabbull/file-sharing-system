@@ -44,7 +44,7 @@ def search_main():
     timeout = args.timeout
 
     local_socket = socket.socket(socket.AF_UNIX, socket.SOCK_SEQPACKET)
-    socket_path = 'test/communicator.socket'
+    socket_path = '/tmp/fss.socket'
     try:
         local_socket.connect(socket_path)
     except FileNotFoundError:
