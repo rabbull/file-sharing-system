@@ -27,10 +27,10 @@ class NeighborList(object):
                 return self.port
             else:
                 raise KeyError()
-        
+
         def __getattr__(self, key):
             return self.__getitem__(key)
-        
+
         def __setattr__(self, key, value):
             if key == 'ip':
                 self.ip = value

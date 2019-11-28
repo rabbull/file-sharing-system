@@ -19,7 +19,7 @@ class Daemon(object):
         self.__addr = (self.__ip, self.__port)
         self.__neighbor_list = NeighborList(cfg.neighbor_list_path)
         self.__repository = Repository(cfg.repository_path)
-    
+
     def __call__(self, *args, **kwargs):
         self.start(*args, **kwargs)
 

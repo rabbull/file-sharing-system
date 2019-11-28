@@ -30,7 +30,7 @@ def main():
         cfg.set_neig(args.neighbor_list)
     if args.repository:
         cfg.set_repo(args.repository)
-    
+
     daemon = Daemon(cfg)
     daemon()
 

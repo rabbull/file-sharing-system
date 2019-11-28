@@ -6,6 +6,7 @@ import socket
 
 from daemon_config import DaemonConfig
 
+
 def fssctl_main():
     command_parser = ap.ArgumentParser()
     group = command_parser.add_mutually_exclusive_group()
@@ -28,6 +29,7 @@ def fssctl_main():
 def config_main():
     raise NotImplementedError()
 
+
 def search_main():
     argparser = ap.ArgumentParser()
     argparser.add_argument('filename', metavar='FILENAME')
@@ -40,7 +42,7 @@ def search_main():
 
     filename = args.filename
     timeout = args.timeout
-    
+
     local_socket = socket.socket(socket.AF_UNIX, socket.SOCK_SEQPACKET)
     socket_path = 'test/communicator.socket'
     try:
@@ -51,9 +53,9 @@ def search_main():
     except ConnectionRefusedError:
         print(f'Connection to socket refused, check if daemon is running.')
         exit(-1)
-    
+
     local_socket.send(f'$Search {filename} {timeout}'.encode('utf-8'))
-    
+
     local_socket.settimeout(timeout)
     try:
         result_buffer = local_socket.recv(1024)

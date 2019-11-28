@@ -38,22 +38,26 @@ class Repository(object):
             self.__basename = os.path.basename(path)
             self.__size = os.path.getsize(path)
             self.__checksum = calculate_checksum(path)
-        
-        @property
-        def path(self): return self.__realpath
-        
-        @property
-        def basename(self): return self.__basename
 
         @property
-        def size(self): return self.__size
+        def path(self):
+            return self.__realpath
 
         @property
-        def checksum(self): return self.__checksum
+        def basename(self):
+            return self.__basename
+
+        @property
+        def size(self):
+            return self.__size
+
+        @property
+        def checksum(self):
+            return self.__checksum
 
         def __eq__(self, another):
             return str(self.__dict__) == str(another.__dict__)
-        
+
         def __str__(self):
             return json.dumps(self.__dict__)
 
@@ -68,7 +72,7 @@ class Repository(object):
         content = fp.read()
         fcntl.lockf(fp, fcntl.LOCK_UN)
         fp.close()
-        
+
         entries = []
         lst = json.loads(content)
         for i in range(len(lst)):
@@ -76,7 +80,7 @@ class Repository(object):
             e.__dict__ = lst[i]
             entries.append(e)
         return entries
-    
+
     def __write(self, entries):
         entries = [entry.__dict__ for entry in entries]
         content = json.dumps(entries)
@@ -85,10 +89,10 @@ class Repository(object):
         fp.write(content)
         fcntl.lockf(fp, fcntl.LOCK_UN)
         fp.close()
-    
+
     def as_list(self):
         return self.__read()
-    
+
     def add_entry(self, new_path):
         entries = self.__read()
         new_entry = self.Entry(new_path)
@@ -96,13 +100,13 @@ class Repository(object):
             return
         entries.append(new_entry)
         self.__write(entries)
-    
+
     def find(self, filename):
         entries = self.as_list()
         for entry in entries:
             if entry.basename == filename:
                 return entry
-        return None  
+        return None
 
 
 if __name__ == '__main__':
