@@ -53,7 +53,7 @@ class NeighborList(object):
         fd.close()
 
     def __read(self):
-        fd = open(self.__path, 'r')
+        fd = open(self.__path, 'r+')
         fcntl.lockf(fd, fcntl.LOCK_EX)
         content = fd.read()
         fcntl.lockf(fd, fcntl.LOCK_UN)

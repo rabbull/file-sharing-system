@@ -33,7 +33,7 @@ def config_main():
 def search_main():
     argparser = ap.ArgumentParser()
     argparser.add_argument('filename', metavar='FILENAME')
-    argparser.add_argument('-t', '--timeout', metavar='SEC', type=float, default=2.0)
+    argparser.add_argument('-t', '--timeout', metavar='SEC', type=float, default=3.0)
 
     args = argparser.parse_args()
     if len(sys.argv) > 1:
@@ -56,11 +56,11 @@ def search_main():
 
     local_socket.send(f'$Search {filename} {timeout}'.encode('utf-8'))
 
-    local_socket.settimeout(timeout)
+    local_socket.settimeout(timeout + 1)
     try:
         result_buffer = local_socket.recv(1024)
     except socket.timeout:
-        print('search timeout.')
+        print('search timeout. daemon can be daed.')
         exit(0)
 
     print(result_buffer)
