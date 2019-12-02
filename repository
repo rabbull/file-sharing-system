@@ -1,9 +1,1 @@
-[
-    {
-        "_Entry__type": "file",
-        "_Entry__realpath": "/home/karl/Documents/file-sharing-system/.gitignore",
-        "_Entry__basename": ".gitignore",
-        "_Entry__size": 32,
-        "_Entry__checksum": "cb7fb1e118725cff65cac48284f5f3f2"
-    }
-]
+[{"_Entry__type": "file", "_Entry__realpath": "/home/karl/Documents/file-sharing-system/.gitignore", "_Entry__basename": ".gitignore", "_Entry__size": 50, "_Entry__checksum": "eff9a3a2cc0f1d25dbab3008996f757a", "_Entry__uuid": "b5d886c74307434cbf57fb37151bc93a", "id": -1}, {"_Entry__type": "file", "_Entry__realpath": "/home/karl/Documents/file-sharing-system/autoport.py", "_Entry__basename": "autoport.py", "_Entry__size": 807, "_Entry__checksum": "f1dfa70f3c0e9b4180b72475cff8cc3c", "_Entry__uuid": "8dd0031040c94dc0b9a8ac6ea48d13e1", "id": -1}, {"_Entry__type": "file", "_Entry__realpath": "/home/karl/Documents/network/hw1.pdf", "_Entry__basename": "hw1.pdf", "_Entry__size": 842514, "_Entry__checksum": "f830252d9f1fac83228d7e625355af53"}]

@@ -36,8 +36,41 @@ class LocalCommunicator(object):
             buff: list = ctl_socket.recv(1024).decode('utf8').split()
             if buff[0] == '$Search':
                 self.search(ctl_socket, buff)
-            if buff[0] == '$Config':
-                raise NotImplementedError()
+            elif buff[0] == '$Repository':
+                self.repository(ctl_socket, buff)
+            elif buff[0] == '$Neighbor':
+                self.neighbor(ctl_socket, buff)
+
+    def neighbor(self, ctl_socket: socket.socket, buff: list):
+        if buff[1] == 'List':
+            neighbors = self.__n.as_list()
+            ctl_socket.send(json.dumps([n.__dict__ for n in neighbors]).encode())
+        elif buff[1] == 'Add':
+            try:
+                ip, port = buff[2].split(':')
+                self.__n.add_entry(ip, port)
+            except Exception as e:
+                ctl_socket.send(f'failed: {e}'.encode())
+                return
+            ctl_socket.send(b'done.')
+        else:
+            raise NotImplementedError()
+
+    def repository(self, ctl_socket: socket.socket, buff: list):
+        if buff[1] == 'List':
+            entries = self.__r.as_list()
+            ctl_socket.send(json.dumps([e.__dict__ for e in entries]).encode())
+        elif buff[1] == 'Add':
+            try:
+                self.__r.add_entry(buff[2])
+            except Exception as e:
+                ctl_socket.send(f'failed: {str(e)}'.encode())
+                return -1
+            ctl_socket.send(b'done.')
+        elif buff[0] == 'Remove':
+            raise NotImplementedError()
+        else:
+            raise SyntaxError()
 
     def search(self, ctl_socket: socket.socket, buff: list):
         filename = str(buff[1])
@@ -70,7 +103,7 @@ class LocalCommunicator(object):
 
 if __name__ == '__main__':
     search_socket = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
-    communicator_cfg = LocalCommunicatorConfig('test/communicator.socket', Repository('repository'),
+    communicator_cfg = LocalCommunicatorConfig('/tmp/fss.socket', Repository('repository'),
                                                NeighborList('neighbors'), '127.0.0.1', 10000)
     communicator = LocalCommunicator(communicator_cfg)
     communicator()

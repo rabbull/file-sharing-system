@@ -2,6 +2,8 @@ import os
 import hashlib
 import json
 import fcntl
+import uuid
+from typing import overload
 
 
 def calculate_checksum(path):
@@ -56,7 +58,7 @@ class Repository(object):
             return self.__checksum
 
         def __eq__(self, another):
-            return str(self.__dict__) == str(another.__dict__)
+            return self.checksum == another.checksum and self.path == another.path
 
         def __str__(self):
             return json.dumps(self.__dict__)
@@ -65,9 +67,7 @@ class Repository(object):
         self.__path = repository_path
 
     def __read(self):
-        print(self.__path)
         fp = open(self.__path, 'r+')
-        print(fp)
         fcntl.lockf(fp, fcntl.LOCK_EX)
         content = fp.read()
         fcntl.lockf(fp, fcntl.LOCK_UN)
@@ -101,11 +101,12 @@ class Repository(object):
         entries.append(new_entry)
         self.__write(entries)
 
-    def find(self, filename):
+    def find(self, basename: str):
         entries = self.as_list()
-        for entry in entries:
-            if entry.basename == filename:
-                return entry
+        if type(basename) is str:
+            for entry in entries:
+                if entry.basename == basename:
+                    return entry
         return None
 
 
@@ -113,4 +114,4 @@ if __name__ == '__main__':
     repo = Repository('repository')
     print(repo.as_list())
     repo.add_entry('.gitignore')
-    print([r.__dict__ for r in repo.as_list()])
+    repo.add_entry('autoport.py')

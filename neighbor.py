@@ -79,6 +79,4 @@ class NeighborList(object):
 
 if __name__ == '__main__':
     neighbor_list = NeighborList(sys.argv[1])
-    neighbor_list.add_entry('127.0.0.1', 1024)
-    neighbor_list.add_entry('127.0.0.1', 1998)
-    neighbor_list.add_entry('127.0.0.1', 1111)
+    print(neighbor_list.as_list())

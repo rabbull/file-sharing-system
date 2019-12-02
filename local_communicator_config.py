@@ -20,7 +20,7 @@ class LocalCommunicatorConfig(object):
 
     @property
     def neighbors(self):
-        return self.__repository
+        return self.__neighbors
 
     @property
     def search_ip(self):
