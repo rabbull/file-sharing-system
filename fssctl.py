@@ -1,10 +1,10 @@
+#!/usr/bin/python3
 import os
+import shutil
 import sys
 import json
 import argparse as ap
 import socket
-
-from daemon_config import DaemonConfig
 
 
 def fssctl_main():
@@ -34,6 +34,8 @@ def search_main():
     argparser = ap.ArgumentParser()
     argparser.add_argument('filename', metavar='FILENAME')
     argparser.add_argument('-t', '--timeout', metavar='SEC', type=float, default=3.0)
+    argparser.add_argument('-p', '--save-path', metavar='PATH', type=str, default='.')
+    argparser.add_argument('-y', '--yes', action='store_true')
 
     args = argparser.parse_args()
     if len(sys.argv) > 1:
@@ -42,6 +44,8 @@ def search_main():
 
     filename = args.filename
     timeout = args.timeout
+    default_savepath = args.save_path
+    always_yes = args.yes
 
     local_socket = socket.socket(socket.AF_UNIX, socket.SOCK_SEQPACKET)
     socket_path = '/tmp/fss.socket'
@@ -64,6 +68,27 @@ def search_main():
         exit(0)
 
     print(result_buffer)
+    if result_buffer == b'timeout':
+        print('no result found before timeout.')
+        exit(0)
+
+    result = json.loads(result_buffer[4:])
+    if not always_yes:
+        remote_address = result['address']
+        print(f'found at {remote_address[0]}:{remote_address[1]}')
+        download = input('download? [y/N]: ')
+        if download == 'y':
+            savepath = input(f'save path [{default_savepath}]: ')
+            if savepath == '':
+                savepath = default_savepath
+        else:
+            print('aborted.')
+            exit(0)
+    else:
+        savepath = default_savepath
+    savepath = os.path.abspath(savepath)
+    print(f'downloading to \'{savepath}\'..')
+
 
 
 if __name__ == '__main__':

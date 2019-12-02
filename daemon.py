@@ -4,13 +4,16 @@ import argparse as ap
 import multiprocessing
 
 from daemon_config import DaemonConfig
+from local_communicator_config import LocalCommunicatorConfig
 from neighbor import NeighborList
 from repository import Repository
 import autoport
 from local_communicator import LocalCommunicator
 from search import SearchController
+from search_config import SearchControllerConfig
 
-BUFSIZE = 1024
+BUFFER_SIZE = 1024
+LOCAL_COMMUNICATOR_SOCKET_FILE_PATH = '/tmp/fss.socket'
 
 
 class Daemon(object):
@@ -26,19 +29,21 @@ class Daemon(object):
         self.start(*args, **kwargs)
 
     def start(self):
-        searcher_port = autoport.get_available_port(
-            ip=self.__ip, start_from=self.__port + 1, protocol='udp')
-        searcher = SearchController(
-            self.__ip, searcher_port, self.__repository, self.__neighbor_list)
-        communicator = LocalCommunicator(
-            '/tmp/fss.socket', self.__repository, self.__neighbor_list, self.__ip, searcher_port)
+        searcher_port = autoport.get_available_port(ip=self.__ip, start_from=self.__port + 1, protocol='udp')
+        searcher_cfg = SearchControllerConfig(self.__ip, searcher_port, self.__repository, self.__neighbor_list)
+        searcher = SearchController(searcher_cfg)
 
-        processes = []
-        processes.append(multiprocessing.Process(target=searcher))
-        processes.append(multiprocessing.Process(target=communicator))
-        
+        communicator_cfg = LocalCommunicatorConfig(socket_path=LOCAL_COMMUNICATOR_SOCKET_FILE_PATH,
+                                                   repository=self.__repository, neighbors=self.__neighbor_list,
+                                                   search_ip=self.__ip, search_port=searcher_port)
+        communicator = LocalCommunicator(communicator_cfg)
+
+        processes = [
+            multiprocessing.Process(target=searcher),  # search controller
+            multiprocessing.Process(target=communicator),  # local communicator
+        ]
+
         for p in processes:
-            print(p)
             p.start()
         for p in processes:
             p.join()

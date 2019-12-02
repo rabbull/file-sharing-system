@@ -4,17 +4,18 @@ import json
 
 from repository import Repository
 from neighbor import NeighborList
+from search_config import SearchControllerConfig
 
 
 class SearchController(object):
-    def __init__(self, ip: str, port: int, repository: Repository, neighbors: NeighborList):
-        self.__r = repository
-        self.__n = neighbors
+    def __init__(self, cfg: SearchControllerConfig):
+        self.__r = cfg.ip
+        self.__n = cfg.neighbors
 
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.__socket.bind((ip, port))
-        self.__ip = ip
-        self.__port = port
+        self.__socket.bind((cfg.ip, cfg.port))
+        self.__ip = cfg.ip
+        self.__port = cfg.port
 
         self.__ignore_query_ids = []
 
@@ -39,7 +40,9 @@ class SearchController(object):
             # hit
             if result:
                 if 'checksum' not in buff.keys() or buff['checksum'] == result.checksum:
-                    self.__socket.sendto(f'hit: {result.__dict__}'.encode(), tuple(buff['sentry_address']))
+                    result = result.__dict__
+                    result['address'] = (self.__ip, self.__port)
+                    self.__socket.sendto(f'hit: {json.dumps(result)}'.encode(), tuple(buff['sentry_address']))
                     continue
 
             # miss
@@ -49,5 +52,7 @@ class SearchController(object):
 
 
 if __name__ == '__main__':
-    search_controller = SearchController('127.0.0.1', 10000, Repository('repository'), NeighborList('neighbors'))
+    search_controller_cfg = SearchControllerConfig('127.0.0.1', 10000, Repository('repository'),
+                                                   NeighborList('neighbors'))
+    search_controller = SearchController(cfg=search_controller_cfg)
     search_controller()
