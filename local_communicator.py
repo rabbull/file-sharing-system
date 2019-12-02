@@ -34,7 +34,6 @@ class LocalCommunicator(object):
         while True:
             ctl_socket, _ = self.__local_socket.accept()
             buff: list = ctl_socket.recv(1024).decode('utf8').split()
-            print(buff)
             if buff[0] == '$Search':
                 self.search(ctl_socket, buff)
             if buff[0] == '$Config':
@@ -48,7 +47,6 @@ class LocalCommunicator(object):
         sentry_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         port = autoport.get_available_port(ip=self.__search_ip, protocol='udp', start_from=self.__search_port)
         sentry_address = (self.__search_ip, port)
-        print(sentry_address)
         sentry_socket.bind(sentry_address)
         sentry_socket.settimeout(timeout)
 

@@ -29,7 +29,6 @@ class SearchController(object):
     def run(self):
         while True:
             buff, _ = self.__socket.recvfrom(1024)
-            print(buff)
             buff = json.loads(buff.decode())
 
             if buff['query_id'] in self.__ignore_query_ids:

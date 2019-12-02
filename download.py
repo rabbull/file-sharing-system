@@ -31,10 +31,9 @@ class FileHost(object):
             'size': self.__entry.size,
             'buffer_size': self.BUFFER_SIZE,
         }
-        print(meta)
         client.send(json.dumps(meta).encode())
         try:
-            print(client.recv(1024))
+            client.recv(1024)
         except socket.timeout:
             return 1
 
@@ -60,7 +59,6 @@ class FileClient(object):
         self.run()
 
     def run(self):
-        print(type(self.__host_addr), self.__host_addr)
         self.__client.connect(self.__host_addr)
 
         meta = json.loads(self.__client.recv(102400))

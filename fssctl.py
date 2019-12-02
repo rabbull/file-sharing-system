@@ -69,7 +69,6 @@ def search_main():
         print('search timeout. daemon can be daed.')
         return 0
 
-    print(result_buffer)
     if result_buffer == b'timeout':
         print('no result found before timeout.')
         return 0
