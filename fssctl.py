@@ -79,12 +79,17 @@ def neighbor_main():
     elif args.add:
         command.append('Add')
         try:
-            ip, port = args.add.split(':')
+            _, _ = args.add.split(':')
         except Exception:
             raise SyntaxError()
         command.append(args.add)
     elif args.remove:
         raise NotImplementedError()
+
+    local_socket = get_local_socket()
+    local_socket.send(' '.join(command).encode())
+    response = local_socket.recv(1024)
+    print(response)
 
 
 def repository_main():
@@ -93,7 +98,6 @@ def repository_main():
     group.add_argument('-l', '--list', action='store_true')
     group.add_argument('-a', '--add', metavar='PATH')
     group.add_argument('-r', '--remove', metavar='BASENAME')
-    # group.add_argument('--refresh', action='store_true')
 
     args = parser.parse_args(sys.argv[1:2])
     if len(sys.argv) > 1:
@@ -103,8 +107,6 @@ def repository_main():
     command = ['$Repository']
     if args.list:
         command.append('List')
-    elif args.refresh:
-        command.append('Refresh')
     elif args.add:
         command.append('Add')
         path = os.path.abspath(args.add)

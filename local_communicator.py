@@ -44,7 +44,7 @@ class LocalCommunicator(object):
     def neighbor(self, ctl_socket: socket.socket, buff: list):
         if buff[1] == 'List':
             neighbors = self.__n.as_list()
-            ctl_socket.send(json.dumps([n.__dict__ for n in neighbors]).encode())
+            ctl_socket.send(json.dumps([f'{n[0]}:{n[1]}' for n in neighbors]).encode())
         elif buff[1] == 'Add':
             try:
                 ip, port = buff[2].split(':')
