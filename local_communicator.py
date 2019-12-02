@@ -46,8 +46,7 @@ class LocalCommunicator(object):
 
         import autoport
         sentry_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        port = autoport.get_available_port(
-            ip=self.__search_ip, protocol='udp', start_from=self.__search_port)
+        port = autoport.get_available_port(ip=self.__search_ip, protocol='udp', start_from=self.__search_port)
         sentry_address = (self.__search_ip, port)
         print(sentry_address)
         sentry_socket.bind(sentry_address)

@@ -6,6 +6,8 @@ import json
 import argparse as ap
 import socket
 
+from download import FileClient
+
 
 def fssctl_main():
     command_parser = ap.ArgumentParser()
@@ -65,14 +67,14 @@ def search_main():
         result_buffer = local_socket.recv(1024)
     except socket.timeout:
         print('search timeout. daemon can be daed.')
-        exit(0)
+        return 0
 
     print(result_buffer)
     if result_buffer == b'timeout':
         print('no result found before timeout.')
-        exit(0)
+        return 0
 
-    result = json.loads(result_buffer[4:])
+    result = json.loads(result_buffer)
     if not always_yes:
         remote_address = result['address']
         print(f'found at {remote_address[0]}:{remote_address[1]}')
@@ -83,12 +85,14 @@ def search_main():
                 savepath = default_savepath
         else:
             print('aborted.')
-            exit(0)
+            return 0
     else:
+        remote_address = result['address']
         savepath = default_savepath
     savepath = os.path.abspath(savepath)
-    print(f'downloading to \'{savepath}\'..')
-
+    print(f'downloading from {remote_address} to \'{savepath}\'..')
+    client = FileClient(host_ip=remote_address[0], host_port=remote_address[1], save_path=savepath)
+    client.run()
 
 
 if __name__ == '__main__':

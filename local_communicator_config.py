@@ -1,3 +1,7 @@
+from neighbor import NeighborList
+from repository import Repository
+
+
 class LocalCommunicatorConfig(object):
     def __init__(self, socket_path: str, repository: Repository, neighbors: NeighborList, search_ip: str,
                  search_port: int):

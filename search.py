@@ -1,7 +1,11 @@
 import os
 import socket
 import json
+import multiprocessing
+import threading
 
+import autoport
+from download import FileHost
 from repository import Repository
 from neighbor import NeighborList
 from search_config import SearchControllerConfig
@@ -9,7 +13,7 @@ from search_config import SearchControllerConfig
 
 class SearchController(object):
     def __init__(self, cfg: SearchControllerConfig):
-        self.__r = cfg.ip
+        self.__r = cfg.repository
         self.__n = cfg.neighbors
 
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -40,9 +44,13 @@ class SearchController(object):
             # hit
             if result:
                 if 'checksum' not in buff.keys() or buff['checksum'] == result.checksum:
+                    host_port = autoport.get_available_port(self.__ip, self.__port, protocol='tcp')
+                    host = FileHost(ip=self.__ip, port=host_port, repo_entry=result)
+                    host_proc = multiprocessing.Process(target=host)
+                    host_proc.start()
                     result = result.__dict__
-                    result['address'] = (self.__ip, self.__port)
-                    self.__socket.sendto(f'hit: {json.dumps(result)}'.encode(), tuple(buff['sentry_address']))
+                    result['address'] = (self.__ip, host_port)
+                    self.__socket.sendto(json.dumps(result).encode(), tuple(buff['sentry_address']))
                     continue
 
             # miss
